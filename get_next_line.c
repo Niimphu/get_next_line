@@ -6,7 +6,7 @@
 /*   By: yiwong <yiwong@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 18:39:18 by yiwong            #+#    #+#             */
-/*   Updated: 2023/01/28 19:40:24 by yiwong           ###   ########.fr       */
+/*   Updated: 2023/01/30 01:00:40 by yiwong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*get_next_line(int fd)
 	static char	*c;
 	int			bytes_read;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	buff = malloc(BUFFER_SIZE + 1);
 	if (!buff)
 		return (NULL);
@@ -25,7 +27,7 @@ char	*get_next_line(int fd)
 	c = 0;
 	while (c != '\n' && c)
 	{
-		bytes_read = read(fd, &buff, BUFFER_SIZE);
+		bytes_read = read(fd, buff, BUFFER_SIZE);
 		*buff++ = c;
 	}
 	return (buff);
