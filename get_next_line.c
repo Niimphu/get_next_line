@@ -28,9 +28,9 @@ char	*gnl_split(char *buff2, char *buff)
 	i = 0;
 	while (buff2[i++] != '\n')
 		r[i] = buff2[i];
-	buff = gnl_calloc(gnl_strlen(buff2 + i + 1, '\0'), sizeof(char));
-	if (!buff)
-		return (NULL);
+	// buff = gnl_calloc(gnl_strlen(buff2 + i + 1, '\0'), sizeof(char));
+	// if (!buff)
+	// 	return (NULL);
 	j = 0;
 	while (buff2[i] && buff[j])
 		buff[j++] = buff2[i++];
@@ -67,11 +67,8 @@ char	*gnl_join(char *buff, char *read_line)
 
 char	*gnl_read(char *buff2, int bytes_read, int fd)
 {
-	char	*read_line;
+	char	read_line[BUFFER_SIZE + 1];
 
-	read_line = gnl_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (!read_line)
-		return (NULL);
 	while (!gnl_findnl(buff2) && bytes_read > 0)
 	{
 		bytes_read = read(fd, read_line, BUFFER_SIZE);
