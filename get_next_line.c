@@ -5,47 +5,43 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yiwong <yiwong@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/28 18:39:18 by yiwong            #+#    #+#             */
-/*   Updated: 2023/01/31 18:48:57 by yiwong           ###   ########.fr       */
+/*   Created: 2023/02/01 18:41:58 by yiwong            #+#    #+#             */
+/*   Updated: 2023/02/01 18:41:58 by yiwong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-
-char	*ft_rline(char *buff)
-{
-	int		i;
-	char	*temp;
-
-	i = 0;
-	temp = ft_strdup(buff);
-	while (temp[i - 1] != '\n')
-		i++;
-	free(temp + i + 1);
-	return (temp);
-}
-
-int	find_nl(char *s)
+int	gnl_findnl(char *s)
 {
 	int		i;
 
 	i = 0;
 	while (s[i])
 	{
-		if (s[i] == '\n')
+		if (s[i++] == '\n')
 			return (i);
-		i++;
 	}
 	return (NULL);
+}
+
+char	*ft_calloc(int nmemb, int size)
+{
+	char	*r;
+	int		i;
+
+	r = malloc(nmemb * size);
+	if (!r)
+		return (NULL);
+	i = 0;
+	while (i < nmemb)
+		r[i++] = 0;
+	return (r);
 }
 
 char	*get_next_line(int fd)
 {
 	static char	*buff;
-	char		*readline;
-	char		*r;
+	char		*read;
 	int			bytes_read;
-	int			nl_index;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
@@ -54,26 +50,14 @@ char	*get_next_line(int fd)
 		buff = NULL;
 		return (NULL);
 	}
-	readline = malloc(BUFFER_SIZE + 1);
-	if (!readline)
-		return (NULL);
-	readline[BUFFER_SIZE] = '\0';
-	bytes_read = read(fd, readline, BUFFER_SIZE);
-	if (!buff && bytes_read)
-		buff = ft_strdup(readline);
-	else if (bytes_read)
-		ft_strjoin(buff, readline);
-	nl_index = find_nl(readline);
-	while (!nl_index && bytes_read > 0)
+	if (!buff)
 	{
-		bytes_read = read(fd, readline, BUFFER_SIZE);
-		buff = ft_strjoin(buff, readline);
-		nl_index = find_nl(readline);
+		buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+		if (!buff)
+			return (NULL);
+		bytes_read = read(fd, buff, BUFFER_SIZE);
 	}
-	free(readline);
-	if (bytes_read == 0)
-		return (buff);
-	r = ft_rline(buff);
-	buff = find_nl(buff) + 1;
-	return (r);
+	read = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	bytes_read = 1;
+	while(bytes_read > 0 && !nl_index)
 }
