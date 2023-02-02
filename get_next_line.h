@@ -6,7 +6,7 @@
 /*   By: yiwong <yiwong@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 18:39:40 by yiwong            #+#    #+#             */
-/*   Updated: 2023/01/31 18:49:53 by yiwong           ###   ########.fr       */
+/*   Updated: 2023/02/02 19:07:07 by yiwong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-int		find_nl(char *s);
 char	*get_next_line(int fd);
-char	*ft_rline(char *buff);
+char	*gnl_read(char *buff2, int bytes_read, int fd);
+char	*gnl_join(char *buff, char *read_line);
+char	*gnl_split(char *buff2, char *buff);
 
-int		ft_strlen(const char *s);
-int		ft_strlcpy(char *dst, const char *src, int size);
-int		ft_strlcat(char *dst, const char *src, int size);
-char	*ft_strdup(const char *s);
-char	*ft_strjoin(char const *s1, char const *s2);
+int		gnl_strlen(char *s, char c);
+int		gnl_findnl(char *s);
+char	*gnl_calloc(int nmemb, int size);
+
 
 #endif
