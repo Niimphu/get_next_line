@@ -12,102 +12,82 @@
 
 #include "get_next_line.h"
 
-char	*gnl_split(char *buff2, char *buff)
+char	*gnl_save(char *buff)
 {
-	char	*r;
+	char	*save;
 	int		i;
 	int		j;
 
-	if (!gnl_findnl(buff2))
-		return (gnl_join(buff, buff2));
-	if (*buff)
-		buff2 = gnl_join(buff, buff2);
-	r = gnl_calloc(gnl_strlen(buff2, '\n') + 2, sizeof(char));
-	if (!r)
+	i = gnl_findnl(buff);
+	if (!i || !buff[i])
+	{
+		free(buff);
 		return (NULL);
-	i = 0;
-	while (buff2[i++] != '\n')
-		r[i] = buff2[i];
-	// buff = gnl_calloc(gnl_strlen(buff2 + i + 1, '\0'), sizeof(char));
-	// if (!buff)
-	// 	return (NULL);
+	}
+	save = gnl_calloc(gnl_strlen(buff, '\0') - i++, sizeof(char));
 	j = 0;
-	while (buff2[i] && buff[j])
-		buff[j++] = buff2[i++];
-	while (buff[j])
-		buff[j++] = '\0';
-	buff = buff2;
-	if (buff2)
-		free(buff2);
-	buff2 = NULL;
-	return (r);
+	while (buff[i])
+		save[j++] = buff[i++];
+	free(buff);
+	return (save);
 }
 
-char	*gnl_join(char *buff, char *read_line)
+char	*gnl_retline(char *line)
 {
 	char	*r;
-	int		slenb;
-	int		slenrl;
 	int		i;
 
-	if (!buff)
-		return (read_line);
-	i = 0;
-	slenb = gnl_strlen(buff, '\0');
-	slenrl = gnl_strlen(read_line, '\0');
-	r = gnl_calloc((slenb + slenrl + 1), sizeof(char));
-	if (!r)
+	if (!*line)
 		return (NULL);
-	while (*buff)
-		r[i++] = *buff++;
-	while (*read_line)
-		r[i++] = *read_line++;
+	r = gnl_calloc(gnl_strlen(line, '\n') + 1, sizeof(char));
+	i = 0;
+	while (line[i] && !gnl_findnl(line))
+	{
+		r[i] = line[i];
+		i++;
+	}
+	if (line[i] && line[i] == '\n')
+		r[i] = '\n';
 	return (r);
 }
 
-char	*gnl_read(char *buff2, int bytes_read, int fd)
+char	*gnl_read(int fd, char *line)
 {
-	char	read_line[BUFFER_SIZE + 1];
+	char	*buff;
+	int		bytes_read;
 
-	while (!gnl_findnl(buff2) && bytes_read > 0)
+	if (!line)
+		line = gnl_calloc(1, sizeof(char));
+	buff = gnl_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (!buff)
+		return (NULL);
+	bytes_read = 1;
+	while (bytes_read > 0 && !gnl_findnl(buff))
 	{
-		bytes_read = read(fd, read_line, BUFFER_SIZE);
-		buff2 = gnl_join(buff2, read_line);
-		if (!buff2)
+		bytes_read = read(fd, buff, BUFFER_SIZE);
+		if (bytes_read == -1)
+		{
+			free(buff);
 			return (NULL);
+		}
+		line[bytes_read] = '\0';
+		line = gnl_join(line, buff);
 	}
-	return (buff2);
+	free(buff);
+	return (line);
 }
 
 char	*get_next_line(int fd)
 {
 	static char	*buff;
 	char		*r;
-	char 		*read_line;
-	int			bytes_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-	{
-		if (buff)
-		{
-			free(buff);
-			buff = NULL;
-		}
 		return (NULL);
-	}
+	buff = gnl_read(fd, buff);
 	if (!buff)
-	{
-		buff = gnl_calloc(BUFFER_SIZE + 1, sizeof(char));
-		if (!buff)
-			return (NULL);
-		bytes_read = read(fd, buff, BUFFER_SIZE);
-	}
-	else
-		bytes_read = 1;
-	read_line = gnl_read(buff, bytes_read, fd);
-	if (!read_line)
 		return (NULL);
-	r = gnl_split(read_line, buff);
-	free(read_line);
+	r = gnl_retline(buff);
+	buff = gnl_save(buff);
 	return (r);
 }

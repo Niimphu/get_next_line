@@ -6,11 +6,36 @@
 /*   By: yiwong <yiwong@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:13:22 by yiwong            #+#    #+#             */
-/*   Updated: 2023/02/02 19:35:13 by yiwong           ###   ########.fr       */
+/*   Updated: 2023/02/03 16:07:22 by yiwong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*gnl_join(char *buff, char *read_line)
+{
+	char	*r;
+	int		i;
+	int		j;
+
+	if (!buff)
+		return (read_line);
+	r = gnl_calloc((gnl_strlen(buff, '\0') + \
+		gnl_strlen(read_line, '\0') + 1), sizeof(char));
+	if (!r)
+		return (NULL);
+	i = 0;
+	while (buff[i])
+	{
+		r[i] = buff[i];
+		i++;
+	}
+	j = 0;
+	while (read_line[j])
+		r[i++] = read_line[j++];
+	free(buff);
+	return (r);
+}
 
 char	*gnl_calloc(int nmemb, int size)
 {
@@ -46,7 +71,8 @@ int	gnl_strlen(char *s, char c)
 	if (!s)
 		return (0);
 	i = 0;
-	while (s[i] != c && s[i++]){
+	while (s[i] != c && s[i++])
+	{
 	}
 	return (i);
 }
