@@ -39,7 +39,7 @@ char	*gnl_retline(char *line)
 
 	if (!*line)
 		return (NULL);
-	r = gnl_calloc(gnl_strlen(line, '\n') + 1, sizeof(char));
+	r = gnl_calloc(gnl_strlen(line, '\n') + 2, sizeof(char));
 	i = 0;
 	while (line[i] && !gnl_findnl(line))
 	{
@@ -70,8 +70,11 @@ char	*gnl_read(int fd, char *line)
 			free(buff);
 			return (NULL);
 		}
-		line[bytes_read] = '\0';
-		line = gnl_join(line, buff);
+		if (bytes_read > 0)
+		{
+			line[bytes_read] = '\0';
+			line = gnl_join(line, buff);
+		}
 	}
 	free(buff);
 	return (line);
