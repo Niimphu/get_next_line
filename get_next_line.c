@@ -70,11 +70,8 @@ char	*gnl_read(int fd, char *line)
 			free(buff);
 			return (NULL);
 		}
-		if (bytes_read > 0)
-		{
-			line[bytes_read] = '\0';
-			line = gnl_join(line, buff);
-		}
+		buff[bytes_read] = '\0';
+		line = gnl_join(line, buff);
 	}
 	free(buff);
 	return (line);
