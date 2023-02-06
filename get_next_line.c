@@ -24,8 +24,9 @@ char	*gnl_save(char *buff)
 		free(buff);
 		return (NULL);
 	}
-	save = gnl_calloc(gnl_strlen(buff, '\0') - i++, sizeof(char));
+	save = gnl_calloc(gnl_strlen(buff, '\0') - i + 2, sizeof(char));
 	j = 0;
+	i++;
 	while (buff[i])
 		save[j++] = buff[i++];
 	free(buff);
@@ -41,13 +42,16 @@ char	*gnl_retline(char *line)
 		return (NULL);
 	r = gnl_calloc(gnl_strlen(line, '\n') + 2, sizeof(char));
 	i = 0;
-	while (line[i] && !gnl_findnl(line))
+	while (line[i] && line[i] != '\n')
 	{
 		r[i] = line[i];
 		i++;
 	}
 	if (line[i] && line[i] == '\n')
-		r[i] = '\n';
+	{
+		r[i++] = '\n';
+		r[i] = '\0';
+	}
 	return (r);
 }
 
