@@ -26,7 +26,12 @@ char	*gnl_save(char *buff)
 	}
 	save = gnl_calloc(gnl_strlen(buff, '\0') - i + 2, sizeof(char));
 	j = 0;
-	i++;
+	if (gnl_findnl(buff))
+	{
+		while (buff[i] != '\n')
+			i++;
+		i++;
+	}
 	while (buff[i])
 		save[j++] = buff[i++];
 	free(buff);
@@ -48,10 +53,8 @@ char	*gnl_retline(char *line)
 		i++;
 	}
 	if (line[i] && line[i] == '\n')
-	{
 		r[i++] = '\n';
-		r[i] = '\0';
-	}
+	r[i] = '\0';
 	return (r);
 }
 
