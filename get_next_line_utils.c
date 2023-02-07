@@ -6,7 +6,7 @@
 /*   By: yiwong <yiwong@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:13:22 by yiwong            #+#    #+#             */
-/*   Updated: 2023/02/07 04:00:36 by yiwong           ###   ########.fr       */
+/*   Updated: 2023/02/07 18:25:48 by yiwong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char	*gnl_join(char *buff, char *read_line)
 	j = 0;
 	while (read_line[j])
 		r[i++] = read_line[j++];
+	r[i] = '\0';
 	free(buff);
 	return (r);
 }
@@ -56,11 +57,10 @@ int	gnl_findnl(char *s)
 	int		i;
 
 	i = 0;
-	while (s[i])
+	while (s[i++])
 	{
 		if (s[i] == '\n')
 			return (i);
-		i++;
 	}
 	return (0);
 }
