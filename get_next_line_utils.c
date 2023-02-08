@@ -6,7 +6,7 @@
 /*   By: yiwong <yiwong@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 16:13:22 by yiwong            #+#    #+#             */
-/*   Updated: 2023/02/07 18:25:48 by yiwong           ###   ########.fr       */
+/*   Updated: 2023/02/08 13:51:34 by yiwong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,13 @@ int	gnl_findnl(char *s)
 	int		i;
 
 	i = 0;
-	while (s[i++])
+	while (s[i])
 	{
 		if (s[i] == '\n')
 			return (i);
+		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 int	gnl_strlen(char *s, char c)

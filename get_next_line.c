@@ -19,17 +19,19 @@ char	*gnl_save(char *buff)
 	int		j;
 
 	i = gnl_findnl(buff);
-	if (!i || !buff[i])
+	if (i == -1 || !buff[i])
 	{
 		free(buff);
 		return (NULL);
 	}
 	save = gnl_calloc(gnl_strlen(buff, '\0') - i + 2, sizeof(char));
 	j = 0;
-	if (gnl_findnl(buff))
+	if (gnl_findnl(buff) >= 0)
 	{
 		while (buff[i] != '\n')
+		{
 			i++;
+		}
 		i++;
 	}
 	while (buff[i])
@@ -69,7 +71,7 @@ char	*gnl_read(int fd, char *line)
 	if (!buff)
 		return (NULL);
 	bytes_read = 1;
-	while (bytes_read > 0 && !gnl_findnl(buff))
+	while (bytes_read > 0 && gnl_findnl(buff) < 0)
 	{
 		bytes_read = read(fd, buff, BUFFER_SIZE);
 		if (bytes_read == -1)
