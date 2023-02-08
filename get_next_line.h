@@ -6,7 +6,7 @@
 /*   By: yiwong <yiwong@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 18:39:40 by yiwong            #+#    #+#             */
-/*   Updated: 2023/02/06 21:25:57 by yiwong           ###   ########.fr       */
+/*   Updated: 2023/02/08 01:27:57 by yiwong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdio.h>
 
 char	*get_next_line(int fd);
 char	*gnl_read(int fd, char *line);
