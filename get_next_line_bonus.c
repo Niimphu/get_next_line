@@ -90,22 +90,22 @@ char	*gnl_read(int fd, char *line)
 
 char	*get_next_line(int fd)
 {
-	static char	*buff;
+	static char	*buff[512];
 	char		*r;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || fd > 512 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
-		if (buff)
+		if (buff[fd])
 		{
-			free(buff);
-			buff = NULL;
+			free(buff[fd]);
+			buff[fd] = NULL;
 		}
 		return (NULL);
 	}
-	buff = gnl_read(fd, buff);
-	if (!buff)
+	buff[fd] = gnl_read(fd, buff[fd]);
+	if (!buff[fd])
 		return (NULL);
-	r = gnl_retline(buff);
-	buff = gnl_save(buff);
+	r = gnl_retline(buff[fd]);
+	buff[fd] = gnl_save(buff[fd]);
 	return (r);
 }
