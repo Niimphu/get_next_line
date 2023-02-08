@@ -77,6 +77,8 @@ char	*gnl_read(int fd, char *line)
 		if (bytes_read == -1)
 		{
 			free(buff);
+			free(line);
+			buff = NULL;
 			return (NULL);
 		}
 		buff[bytes_read] = '\0';
@@ -92,7 +94,14 @@ char	*get_next_line(int fd)
 	char		*r;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	{
+		if (buff)
+		{
+			free(buff);
+			buff = NULL;
+		}
 		return (NULL);
+	}
 	buff = gnl_read(fd, buff);
 	if (!buff)
 		return (NULL);
